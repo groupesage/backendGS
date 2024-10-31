@@ -1,13 +1,11 @@
 const express=require('express');
 const router=express.Router();
-const {nouvelinfo,getAllinfo,supprimerInfo}=require('../models/offreModels')
+const { nouvelleOffre, getAllOffres, supprimerOffre}=require('../models/offreModels')
 
-router.get('/All',getAllinfo)
+router.get('/All',getAllOffres)
 
-router.post('/Add',nouvelinfo)
+router.post('/Add',nouvelleOffre)
 
-
-router.delete('/delete/:id',supprimerInfo)
-
+router.delete('/delete/:id',supprimerOffre)
 
 module.exports= router

@@ -1,14 +1,14 @@
 const express=require('express');
 const router=express.Router();
-const {ajouterRealisation,getAllrealisations,supprimerRealisation, modifierRealisation}=require('../models/profileModels')
-const upload=require('../uploadsImages')
+const {ajouterprofile, getAllprofile, supprimerprofile}=require('../models/profileModels')
 
-router.get('/All',getAllrealisations,)
 
-router.post('/Add',upload.single("photo"),ajouterRealisation)
+router.get('/All',getAllprofile)
 
-router.put('/edit/:id',modifierRealisation)
+router.post('/Add',ajouterprofile)
 
-router.delete('/delete/:id',supprimerRealisation)
+// router.put('/edit/:id',)
+
+router.delete('/delete/:id',supprimerprofile)
 
 module.exports= router

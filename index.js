@@ -8,7 +8,7 @@ const offres = require('./routes/offreRoutes');
 const profiles = require('./routes/profileRoutes');
 const cors = require('cors');
 
-const allowedOrigins = ['https://mon-portefolio-245f.vercel.app', 'http://localhost:5173'];
+const allowedOrigins = ['http://127.0.0.1:5500', 'http://localhost:5173'];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -21,15 +21,8 @@ app.use(cors({
   }
 }));
 
-
-
-
-
-
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use('/candidatures', candidatures);
 app.use('/offres', offres);

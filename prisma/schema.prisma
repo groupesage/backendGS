@@ -14,33 +14,50 @@ datasource db {
 }
 
 
-// Fichier: schema.prisma
-
-// Définition du modèle "Projet"
-model Realisation {
-  id            Int      @id @default(autoincrement())
-  photo         String
-  titre         String
-  description   String
-  lienDemo      String
+model candidature {
+  id                    Int      @id @default(autoincrement())
+  first_name           String
+  last_name            String
+  date_naissance      String 
+  lieu_naissance       String
+  address              String
+  phone                String
+  email                String    @unique
+  studylevel           String
+  profession           String
+  picture              String
+  cv                   String
+  onem                 String
+  inspection_du_travail String
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 }
 
-// Fichier: schema.prisma
-
-// Définition du modèle "InfoMail"
-model InfoMail {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
-  nom            String
-  numeroWhatsapp String?
-  profession     String
+model profile {
+  id                    Int      @id @default(autoincrement())
+  first_name           String
+  last_name            String
+  date_naissance      String 
+  lieu_naissance       String
+  address              String
+  phone                String
+  email                String    @unique
+  studylevel           String
+  profession           String
+  picture              String
+  cv                   String
+  onem                 String
+  inspection_du_travail String
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 }
 
-
-model commandes {
-  id             Int      @id @default(autoincrement())
-  name           String
-  email          String   @unique
-  description    String
+model offre {
+  id                    Int      @id @default(autoincrement())
+  poste                 String
+  entreprise            String
+  lieu                  String 
+  typecontrat           String
+  salaire               String
+  dateDebut             String
 }
-

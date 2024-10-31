@@ -1,93 +1,159 @@
 const { PrismaClient } = require('@prisma/client');
+const validator = require('validator');
 
 const prisma = new PrismaClient();
 
-
-// add realisation
-
-async function ajouterRealisation(req, res) {
-    const { titre,description,lienDemo } = req.body;
-    const photoPath = req.file.path
+// Fonction pour ajouter une profile
+async function ajouterprofile(req, res) {
+  // Récupération des données envoyées
+  const {
+    first_name,
+    last_name,
+    date_naissance,
+    lieu_naissance,
+    address,
+    phone,
+    email,
+    studylevel,
+    profession,
+    picture,
+    cv,
+    onem,
+    inspection_du_travail
+  } = req.body;
   
-    try {
-      const nouvellerealisation = await prisma.Realisation.create({
-        data: {
-          photo:photoPath,
-          titre:titre,
-          description:description,
-          lienDemo:lienDemo
-        },
-      });
-      console.log('realisation ajoutée avec succès :', nouvellerealisation);
-      res.status(200).json(nouvellerealisation);
-    } catch (erreur) {
-      console.error('Erreur lors de l\'ajout de la realisation :', erreur);
-      res.status(500).json({ erreur: erreur.message });
-    } finally {
-      await prisma.$disconnect();
-    }
-  }
+  console.log(req.body)
 
-// get all realisation
+   // Validation des champs
+   const errors = [];
 
-async function getAllrealisations(req, res) {
-    try {
-      const toutesLesrealisations = await prisma.Realisation.findMany();
-      res.status(200).json(toutesLesrealisations);
-    } catch (erreur) {
-      console.error('Erreur lors de la récupération des realisations :', erreur);
-      res.status(500).json({ erreur: erreur.message });
-    }
-  }
-
-// delete realisation
-
-// delete realisation
-async function supprimerRealisation(req, res) {
-    const { id } = req.params; // Suppose que l'identifiant de la commande est passé en tant que paramètre dans l'URL
+   // Validation pour le prénom
+   if (!validator.isLength(first_name, { min: 1 })) {
+     errors.push('Le prénom ne doit pas être vide.');
+   } else if (!validator.matches(first_name, /^[^<>]+$/)) {
+     errors.push('Le prénom contient des caractères non autorisés.');
+   }
+ 
+   // Validation pour le nom de famille
+   if (!validator.isLength(last_name, { min: 1 })) {
+     errors.push('Le nom de famille ne doit pas être vide.');
+   } else if (!validator.matches(last_name, /^[^<>]+$/)) {
+     errors.push('Le nom de famille contient des caractères non autorisés.');
+   }
+ 
+   // Validation pour la date de naissance
+   if (!validator.isISO8601(date_naissance)) {
+     errors.push('La date de naissance doit être au format ISO 8601 (YYYY-MM-DD).');
+   }
+ 
+   // Validation pour le lieu de naissance
+   if (!validator.isLength(lieu_naissance, { min: 1 })) {
+     errors.push('Le lieu de naissance ne doit pas être vide.');
+   } else if (!validator.matches(lieu_naissance, /^[^<>]+$/)) {
+     errors.push('Le lieu de naissance contient des caractères non autorisés.');
+   }
+ 
+   // Validation pour l'adresse
+   if (!validator.isLength(address, { min: 1 })) {
+     errors.push('L\'adresse ne doit pas être vide.');
+   } else if (!validator.matches(address, /^[^<>]+$/)) {
+     errors.push('L\'adresse contient des caractères non autorisés.');
+   }
+ 
+   // Validation pour le téléphone
+   if (!validator.isMobilePhone(phone, 'any', { strictMode: false })) {
+     errors.push('Le numéro de téléphone est invalide.');
+   }
+ 
+   // Validation pour l'email
+   if (!validator.isEmail(email)) {
+     errors.push('L\'email est invalide.');
+   }
+ 
+   // Validation pour le niveau d'étude
+   if (!validator.isLength(studylevel, { min: 1 })) {
+     errors.push('Le niveau d\'étude ne doit pas être vide.');
+   } else if (!validator.matches(studylevel, /^[^<>]+$/)) {
+     errors.push('Le niveau d\'étude contient des caractères non autorisés.');
+   }
+ 
+   // Validation pour la profession
+   if (!validator.isLength(profession, { min: 1 })) {
+     errors.push('La profession ne doit pas être vide.');
+   } else if (!validator.matches(profession, /^[^<>]+$/)) {
+     errors.push('La profession contient des caractères non autorisés.');
+   }
+ 
+   // Validation pour les URLs
+   const urlFields = { picture, cv, onem, inspection_du_travail };
+   for (const [key, value] of Object.entries(urlFields)) {
+     if (!validator.isURL(value)) {
+       errors.push(`L'URL de ${key} est invalide.`);
+     }
+   }
+ 
+   // Si des erreurs sont présentes, renvoyer une réponse avec un statut 400 et les messages d'erreur
+   if (errors.length > 0) {
+     return res.status(400).json({ errors });
+   }
   
-    try {
-      const realisationSupprimee = await prisma.Realisation.delete({
-        where: {
-          id: parseInt(id) // Assurez-vous de convertir l'ID en un type compatible avec Prisma, si nécessaire
-        }
-      });
-      console.log('Realisation supprimée avec succès :', realisationSupprimee);
-      res.status(200).json(realisationSupprimee);
-    } catch (erreur) {
-      console.error('Erreur lors de la suppression de la realisation :', erreur);
-      res.status(500).json({ erreur: erreur.message });
-    }
-  }
-
-
-  
-  // update realisation
-async function modifierRealisation(req, res) {
-  const { id } = req.params; // Suppose que l'identifiant de la réalisation est passé en tant que paramètre dans l'URL
-  const { email, photo, titre, description, lienDemo } = req.body;
+   // fin des validations 
 
   try {
-    const realisationModifiee = await prisma.Realisation.update({
-      where: {
-        id: parseInt(id) // Assurez-vous de convertir l'ID en un type compatible avec Prisma, si nécessaire
-      },
+    const nouvelleprofile = await prisma.profile.create({
       data: {
-        email: email,
-        photo: photo,
-        titre: titre,
-        description: description,
-        lienDemo: lienDemo
-      }
+        first_name:first_name,
+        last_name:last_name,
+        date_naissance:date_naissance,
+        lieu_naissance:lieu_naissance,
+        address:address,
+        phone:phone,
+        email:email,
+        studylevel:studylevel,
+        profession:profession,
+        picture:picture,
+        cv:cv,
+        onem:onem,
+        inspection_du_travail:inspection_du_travail,
+      },
     });
-    console.log('Realisation modifiée avec succès :', realisationModifiee);
-    res.status(200).json(realisationModifiee);
+    console.log('profile ajoutée avec succès :', nouvelleprofile);
+    res.status(200).json(nouvelleprofile);
   } catch (erreur) {
-    console.error('Erreur lors de la modification de la réalisation :', erreur);
+    console.error('Erreur lors de l\'ajout de la profile :', erreur);
+    res.status(500).json({ erreur: erreur.message });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Récupérer toutes les profiles
+async function getAllprofile(req, res) {
+  try {
+    const toutesLesprofiles = await prisma.profile.findMany();
+    res.status(200).json(toutesLesprofiles);
+  } catch (erreur) {
+    console.error('Erreur lors de la récupération des profiles :', erreur);
     res.status(500).json({ erreur: erreur.message });
   }
 }
 
+// Supprimer une profile
+async function supprimerprofile(req, res) {
+  const { id } = req.params;
 
+  try {
+    const profileSupprimee = await prisma.profile.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    console.log('profile supprimée avec succès :', profileSupprimee);
+    res.status(200).json(profileSupprimee);
+  } catch (erreur) {
+    console.error('Erreur lors de la suppression de la profile :', erreur);
+    res.status(500).json({ erreur: erreur.message });
+  }
+}
 
-module.exports={ajouterRealisation,getAllrealisations,supprimerRealisation, modifierRealisation}
+module.exports = { ajouterprofile, getAllprofile, supprimerprofile };

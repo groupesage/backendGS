@@ -1,17 +1,13 @@
 const express=require('express');
 const router=express.Router();
-const {ajouterCommande,getAllCommands,supprimerCommande}=require('../models/candidatureModels')
+const {ajouterCandidature,getAllCandidature,supprimerCandidature}=require('../models/candidatureModels')
 
-router.post('/Add', upload.fields([
-    { name: 'photo', maxCount: 1 },
-    { name: 'document', maxCount: 1 }
-  ]), ajouterRealisation);
   
-router.get('/All',getAllCommands)
+router.get('/All',getAllCandidature)
 
-router.post('/Add',ajouterCommande)
+router.post('/Add',ajouterCandidature)
 
-router.delete('/delete/:id',supprimerCommande)
+router.delete('/delete/:id',supprimerCandidature)
 
 
 module.exports= router
