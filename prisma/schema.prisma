@@ -28,7 +28,6 @@ model candidature {
   picture              String
   cv                   String
   onem                 String
-  inspection_du_travail String
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 }
@@ -47,7 +46,6 @@ model profile {
   picture              String
   cv                   String
   onem                 String
-  inspection_du_travail String
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 }

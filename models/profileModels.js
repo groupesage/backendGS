@@ -18,8 +18,7 @@ async function ajouterprofile(req, res) {
     profession,
     picture,
     cv,
-    onem,
-    inspection_du_travail
+    onem
   } = req.body;
   
   console.log(req.body)
@@ -85,7 +84,7 @@ async function ajouterprofile(req, res) {
    }
  
    // Validation pour les URLs
-   const urlFields = { picture, cv, onem, inspection_du_travail };
+   const urlFields = { picture, cv, onem };
    for (const [key, value] of Object.entries(urlFields)) {
      if (!validator.isURL(value)) {
        errors.push(`L'URL de ${key} est invalide.`);
@@ -114,8 +113,7 @@ async function ajouterprofile(req, res) {
         picture:picture,
         cv:cv,
         onem:onem,
-        inspection_du_travail:inspection_du_travail,
-      },
+         },
     });
     console.log('profile ajoutée avec succès :', nouvelleprofile);
     res.status(200).json(nouvelleprofile);

@@ -8,7 +8,7 @@ const offres = require('./routes/offreRoutes');
 const profiles = require('./routes/profileRoutes');
 const cors = require('cors');
 
-const allowedOrigins = ['http://127.0.0.1:5500', 'http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5500', 'http://localhost:5173','https://group-sage.com','http://localhost:5501'];
 
 app.use(cors({
   origin: (origin, callback) => {
